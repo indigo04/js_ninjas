@@ -14,4 +14,4 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
-$[localhost:](http://localhost:3005/)
+$[localhost:3005](http://localhost:3005/)
