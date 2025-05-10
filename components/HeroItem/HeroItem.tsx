@@ -17,7 +17,7 @@ export default function HeroItem({ hero, setHeroModal }: Props) {
   const validSrc = validImage ? hero.images[0] : "/fallback.webp";
   return (
     <article
-      className="flex flex-col items-center gap-3 bg-neutral-300 p-8 rounded-2xl cursor-pointer hover:scale-110 duration-500"
+      className="flex flex-col items-center gap-3 bg-white border-4 border-neutral-400 p-8 rounded-2xl cursor-pointer hover:scale-110 duration-500"
       onClick={() => setHeroModal(hero)}
     >
       <h2 className="font-bold">{hero.nickname}</h2>

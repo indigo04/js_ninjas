@@ -23,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className=" bg-blue-300">
+    <html lang="en" className="min-h-screen bg-gradient-to-r from-cyan-200 to-blue-200">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
