@@ -3,6 +3,8 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { Hero } from "../../types/hero";
 import Image from "next/image";
+import { validateImage } from "../../utils/imageHelper";
+import { CreateHero, UpdateHero } from "../../utils/fetch";
 
 type Props = {
   currentHero?: Hero;
@@ -74,17 +76,6 @@ export default function ModalForm({
     return;
   };
 
-  const validateImage = (image: string) => {
-    const validImage =
-      typeof image === "string" &&
-      (image.startsWith("/") ||
-        image.startsWith("http://") ||
-        image.startsWith("https://"));
-
-    const validSrc = validImage ? image : "/fallback.webp";
-    return validSrc;
-  };
-
   const toggleRemoveButton = (item: string, input: string) => {
     if (input === "superpower") {
       setSuperpowers(superpowers.filter((superpower) => superpower !== item));
@@ -137,13 +128,7 @@ export default function ModalForm({
       catch_phrase: phrase,
       images,
     };
-    fetch("http://localhost:3005/superheroes/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newHero),
-    }).finally(() => {
+    CreateHero(newHero).finally(() => {
       setReload(!reload);
       setModal(false);
     });
@@ -168,13 +153,7 @@ export default function ModalForm({
         catch_phrase: phrase,
         images,
       };
-      fetch(`http://localhost:3005/superheroes/edit/${currentHero.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newHero),
-      })
+      UpdateHero(newHero)
         .then(() => {
           setCurrentHero(newHero);
         })

@@ -2,6 +2,8 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { Hero } from "../../types/hero";
 import Image from "next/image";
 import ModalForm from "../CreateModal/ModalForm";
+import { validateImage } from "../../utils/imageHelper";
+import { RemoveHero } from "../../utils/fetch";
 
 type Props = {
   hero: Hero;
@@ -21,7 +23,7 @@ export default function HeroModal({
   const [currentImage, setCurrentImage] = useState(0);
 
   if (!currentHero.images[currentImage]) {
-    setCurrentImage(0)
+    setCurrentImage(0);
   }
 
   const toggleCurrentImage = (order: string) => {
@@ -43,21 +45,8 @@ export default function HeroModal({
     return;
   };
 
-  const validateImage = (image: string) => {
-    const validImage =
-      typeof image === "string" &&
-      (image.startsWith("/") ||
-        image.startsWith("http://") ||
-        image.startsWith("https://"));
-
-    const validSrc = validImage ? image : "/fallback.webp";
-    return validSrc;
-  };
-
   const toggleDeleteButton = () => {
-    fetch(`http://localhost:3005/superheroes/remove/${currentHero.id}`, {
-      method: "DELETE",
-    }).finally(() => setReload(!reload));
+    RemoveHero(currentHero.id).finally(() => setReload(!reload));
 
     setHeroModal(null);
   };
@@ -80,32 +69,34 @@ export default function HeroModal({
         {!editing ? (
           <div className="flex flex-col items-center">
             <div className="flex">
-               {currentHero.images.length > 0 && (
-                        <div className="flex justify-center gap-8 items-center">
-                          {currentHero.images.length > 1 && (
-                            <span
-                              className="cursor-pointer py-8 px-2 border-2 text-blue-600 border-yellow-300"
-                              onClick={() => toggleCurrentImage("prev")}
-                            >
-                              &lt;
-                            </span>
-                          )}
-                          <Image
-                            src={validateImage(currentHero.images ? currentHero.images[currentImage] : "")}
-                            height={150}
-                            width={150}
-                            alt="hero-image"
-                          />
-                          {currentHero.images.length > 1 && (
-                            <span
-                              className="cursor-pointer py-8 px-2 border-2 text-blue-600 border-yellow-300"
-                              onClick={() => toggleCurrentImage("next")}
-                            >
-                              &gt;
-                            </span>
-                          )}
-                        </div>
-                      )}
+              {currentHero.images.length > 0 && (
+                <div className="flex justify-center gap-8 items-center">
+                  {currentHero.images.length > 1 && (
+                    <span
+                      className="cursor-pointer py-8 px-2 border-2 text-blue-600 border-yellow-300"
+                      onClick={() => toggleCurrentImage("prev")}
+                    >
+                      &lt;
+                    </span>
+                  )}
+                  <Image
+                    src={validateImage(
+                      currentHero.images ? currentHero.images[currentImage] : ""
+                    )}
+                    height={150}
+                    width={150}
+                    alt="hero-image"
+                  />
+                  {currentHero.images.length > 1 && (
+                    <span
+                      className="cursor-pointer py-8 px-2 border-2 text-blue-600 border-yellow-300"
+                      onClick={() => toggleCurrentImage("next")}
+                    >
+                      &gt;
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
             <h2 className="flex gap-2 items-center font-bold text-blue-600 drop-shadow-[2px_2px_0px_#ff0]">
               Nickname:

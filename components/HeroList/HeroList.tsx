@@ -6,6 +6,7 @@ import { Hero } from "../../types/hero";
 import ModalForm from "../CreateModal/ModalForm";
 import Pagination from "../Pagination/Pagination";
 import HeroModal from "../HeroModal/HeroModal";
+import { GetHeroes } from "../../utils/fetch";
 
 export default function HeroList() {
   const [heroes, setHeroes] = useState<Hero[]>([]);
@@ -16,11 +17,11 @@ export default function HeroList() {
   const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const show = !heroes.length && !loading;
+  const showMessage = heroes.length === 0 && !loading;
 
   useEffect(() => {
     setLoading(true);
-    fetch("http://localhost:3005/superheroes")
+    GetHeroes()
       .then((res) => res.json())
       .then((data) => setHeroes(data))
       .finally(() => setLoading(false));
@@ -48,7 +49,7 @@ export default function HeroList() {
           Create Hero
         </button>
       </div>
-      {show && (
+      {showMessage && (
         <div className="relative py-10 inline-block text-5xl lg:text-7xl font-bold">
           <span className="absolute bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text blur-sm select-none">
             You have 0 heroes, create one!
